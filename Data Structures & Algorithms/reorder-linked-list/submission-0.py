@@ -1,0 +1,27 @@
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        if not head or not head.next or not head.next.next:
+            return
+
+        # Find the middle of the list
+        slow, fast = head, head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # Reverse the second half of the list
+        prev, current = None, slow.next
+        slow.next = None
+        while current:
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+
+        # Merge the two halves alternately
+        p1, p2 = head, prev
+        while p2:
+            next_p1, next_p2 = p1.next, p2.next
+            p1.next = p2
+            p2.next = next_p1
+            p1, p2 = next_p1, next_p2
